@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Cours interactif sur le Deep Reinforcement Learning : RL, MDP, DQN, Policy-Based, Actor-Critic et PPO."
+    />
+    <title>Deep Reinforcement Learning - Cours interactif</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Aller au contenu</a>
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+
+    <header class="topbar">
+      <div>
+        <h1>Deep Reinforcement Learning</h1>
+      </div>
+      <div class="topbar-actions">
+        <button type="button" class="ghost-btn" id="presentationModeBtn" aria-pressed="false">
+          Mode présentation
+        </button>
+        <button type="button" class="ghost-btn" id="resetProgressBtn" title="Réinitialiser la progression">
+          Réinitialiser
+        </button>
+        <button type="button" class="primary-btn" id="randomQuizBtn">Quiz surprise</button>
+      </div>
+    </header>
+
+    <main class="layout" id="mainContent">
+      <aside class="sidebar">
+        <div class="panel">
+          <p class="panel-title">Parcours du cours</p>
+          <nav id="chapterNav" class="chapter-nav" aria-label="Navigation des chapitres"></nav>
+        </div>
+
+        <div class="panel progress-panel">
+          <p class="panel-title">Progression</p>
+          <div class="progress-track">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <p class="progress-text" id="progressText">0 / 8 chapitres explorés</p>
+          <p class="progress-text quiz-score" id="quizScoreText">Quiz : 0 / 8 validés</p>
+        </div>
+
+        <div class="panel summary-panel">
+          <p class="panel-title">Objectif pédagogique</p>
+          <p>
+            Comprendre intuitivement pourquoi DQN utilise replay buffer et target network,
+            comment une policy apprend une distribution d'actions, et pourquoi PPO stabilise
+            l'apprentissage.
+          </p>
+        </div>
+      </aside>
+
+      <section class="content">
+        <section class="hero panel">
+          <div>
+            <p class="eyebrow">Version interactive</p>
+            <h2 id="chapterTitle">Introduction au Reinforcement Learning</h2>
+            <p id="chapterIntro" class="hero-text"></p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat-card">
+              <span id="statOneLabel">État</span>
+              <strong id="statOneValue">s</strong>
+            </div>
+            <div class="stat-card">
+              <span id="statTwoLabel">Action</span>
+              <strong id="statTwoValue">a</strong>
+            </div>
+            <div class="stat-card">
+              <span id="statThreeLabel">Récompense</span>
+              <strong id="statThreeValue">r</strong>
+            </div>
+          </div>
+        </section>
+
+        <section class="workspace">
+          <article class="panel concept-panel">
+            <div class="section-head">
+              <p class="panel-title">Explication</p>
+              <span class="chip" id="chapterTag">RL</span>
+            </div>
+            <p id="chapterExplanation" class="content-text"></p>
+            <aside class="takeaway-box" id="chapterTakeaway" aria-label="À retenir"></aside>
+            <div class="mini-quiz" id="chapterQuiz"></div>
+          </article>
+
+          <article class="panel visual-panel">
+            <div class="section-head">
+              <p class="panel-title">Visualisation</p>
+              <span class="chip chip-accent">Animation</span>
+            </div>
+            <div id="chapterVisual" class="visual-stage"></div>
+          </article>
+        </section>
+
+        <section class="panel interaction-panel">
+          <div class="section-head">
+            <p class="panel-title">Interaction guidée</p>
+            <span id="interactionHint" class="hint">Clique sur le chapitre actif pour lancer l'animation.</span>
+          </div>
+          <div id="chapterControls" class="controls-grid"></div>
+          <nav class="chapter-pager" aria-label="Navigation entre chapitres">
+            <button type="button" class="ghost-btn pager-btn" id="prevChapterBtn">← Chapitre précédent</button>
+            <span class="pager-indicator" id="pagerIndicator">1 / 8</span>
+            <button type="button" class="ghost-btn pager-btn" id="nextChapterBtn">Chapitre suivant →</button>
+          </nav>
+        </section>
+
+        <section class="panel comparison-panel">
+          <div class="section-head">
+            <p class="panel-title">Comparaison rapide</p>
+            <div class="filter-row" id="comparisonFilters"></div>
+          </div>
+          <div id="comparisonCards" class="comparison-grid"></div>
+        </section>
+      </section>
+    </main>
+
+    <template id="rlVisualTemplate">
+      <div class="rl-diagram">
+        <div class="cycle-node">État</div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-node cycle-agent">Agent</div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-node">Action</div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-node cycle-env">Environnement</div>
+        <div class="cycle-arrow">→</div>
+        <div class="cycle-node cycle-reward">Récompense</div>
+      </div>
+      <svg viewBox="0 0 700 180" class="svg-diagram">
+        <defs>
+          <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <polygon points="0 0, 8 4, 0 8" fill="rgba(255, 255, 255, 0.5)" />
+          </marker>
+        </defs>
+        <rect x="20" y="40" width="120" height="100" rx="20" class="svg-box" />
+        <rect x="195" y="40" width="120" height="100" rx="20" class="svg-box svg-agent" />
+        <rect x="370" y="40" width="120" height="100" rx="20" class="svg-box" />
+        <rect x="545" y="40" width="120" height="100" rx="20" class="svg-box svg-reward" />
+        <text x="80" y="98" text-anchor="middle">s</text>
+        <text x="255" y="98" text-anchor="middle">agent</text>
+        <text x="430" y="98" text-anchor="middle">a</text>
+        <text x="605" y="98" text-anchor="middle">r</text>
+        <path d="M 140 90 L 195 90" class="svg-arrow" />
+        <path d="M 315 90 L 370 90" class="svg-arrow" />
+        <path d="M 490 90 L 545 90" class="svg-arrow" />
+        <circle cx="80" cy="130" r="10" class="pulse-dot" id="rlDot" />
+      </svg>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
